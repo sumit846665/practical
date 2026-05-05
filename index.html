@@ -1,58 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Computer Network Practical Codes</title>
+    <title>CN Practical Codes (Final)</title>
     <style>
         body {
             font-family: Arial;
-            background: #0f172a;
-            color: #e2e8f0;
+            background: #121212;
+            color: white;
             padding: 20px;
-        }
-        h1 {
-            text-align: center;
         }
         .box {
-            background: #1e293b;
-            padding: 20px;
-            margin-bottom: 25px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            background: #1e1e1e;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
         }
         pre {
-            background: #020617;
-            padding: 15px;
-            border-radius: 8px;
+            background: black;
+            padding: 10px;
             overflow-x: auto;
         }
         button {
-            padding: 8px 15px;
-            background: #22c55e;
-            border: none;
+            background: #00c853;
             color: white;
+            border: none;
+            padding: 8px 12px;
             cursor: pointer;
-            border-radius: 6px;
+            border-radius: 5px;
             margin-top: 10px;
-        }
-        button:hover {
-            background: #16a34a;
         }
     </style>
 </head>
 <body>
 
-<h1>📘 CN Practical Codes</h1>
+<h1>✔️ Practical Codes (Working)</h1>
 
 <!-- CRC -->
 <div class="box">
-<h2>1️⃣ CRC (Cyclic Redundancy Check)</h2>
+<h2>CRC Program (Working)</h2>
 
 <pre id="crc">
-#include <stdio.h>
-#include <string.h>
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
 
 int main() {
-    char data[50], key[20];
+    char data[100], key[30], temp[100];
     int i, j;
 
     printf("Enter Data: ");
@@ -64,18 +56,18 @@ int main() {
     int data_len = strlen(data);
     int key_len = strlen(key);
 
+    // append 0
     for(i = data_len; i < data_len + key_len - 1; i++)
         data[i] = '0';
-
     data[i] = '\0';
 
-    char temp[50];
     strcpy(temp, data);
 
+    // CRC
     for(i = 0; i < data_len; i++) {
         if(temp[i] == '1') {
             for(j = 0; j < key_len; j++) {
-                temp[i + j] = (temp[i + j] == key[j]) ? '0' : '1';
+                temp[i+j] = (temp[i+j] == key[j]) ? '0' : '1';
             }
         }
     }
@@ -95,15 +87,15 @@ int main() {
 }
 </pre>
 
-<button onclick="copyCode('crc')">Copy CRC Code</button>
+<button onclick="copyCode('crc')">Copy</button>
 </div>
 
-<!-- IP PROGRAM -->
+<!-- IP -->
 <div class="box">
-<h2>2️⃣ IP Validation + Full Details</h2>
+<h2>IP Validation + Details (Working)</h2>
 
 <pre id="ip">
-#include <stdio.h>
+#include &lt;stdio.h&gt;
 
 int main() {
     int a,b,c,d;
@@ -118,65 +110,61 @@ int main() {
 
     printf("Valid IP\n");
 
-    int mask[4] = {0,0,0,0};
-    int hosts = 0;
+    int mask[4]={0}, hosts=0;
 
-    if(a>=0 && a<=127){
+    if(a<=127){
         printf("Class A\n");
-        mask[0]=255; mask[1]=0; mask[2]=0; mask[3]=0;
-        hosts = 16777214;
+        mask[0]=255;
+        hosts=16777214;
     }
     else if(a<=191){
         printf("Class B\n");
-        mask[0]=255; mask[1]=255; mask[2]=0; mask[3]=0;
-        hosts = 65534;
+        mask[0]=255; mask[1]=255;
+        hosts=65534;
     }
     else if(a<=223){
         printf("Class C\n");
-        mask[0]=255; mask[1]=255; mask[2]=255; mask[3]=0;
-        hosts = 254;
+        mask[0]=255; mask[1]=255; mask[2]=255;
+        hosts=254;
     }
     else if(a<=239){
-        printf("Class D (Multicast)\n");
+        printf("Class D\n");
     }
     else{
-        printf("Class E (Reserved)\n");
+        printf("Class E\n");
     }
 
-    printf("Default Mask: %d.%d.%d.%d\n",mask[0],mask[1],mask[2],mask[3]);
+    printf("Mask: %d.%d.%d.%d\n",mask[0],mask[1],mask[2],mask[3]);
 
-    printf("Network Address: %d.%d.%d.%d\n",
-        a & mask[0],
-        b & mask[1],
-        c & mask[2],
-        d & mask[3]);
+    printf("Network: %d.%d.%d.%d\n",
+        a&mask[0], b&mask[1], c&mask[2], d&mask[3]);
 
-    printf("Broadcast Address: %d.%d.%d.%d\n",
-        (a & mask[0]) | (~mask[0] & 255),
-        (b & mask[1]) | (~mask[1] & 255),
-        (c & mask[2]) | (~mask[2] & 255),
-        (d & mask[3]) | (~mask[3] & 255));
+    printf("Broadcast: %d.%d.%d.%d\n",
+        (a&mask[0])|(~mask[0]&255),
+        (b&mask[1])|(~mask[1]&255),
+        (c&mask[2])|(~mask[2]&255),
+        (d&mask[3])|(~mask[3]&255));
 
-    if(hosts != 0)
-        printf("Number of Hosts: %d\n", hosts);
+    if(hosts)
+        printf("Hosts: %d\n",hosts);
 
-    if((a==10) || (a==172 && b>=16 && b<=31) || (a==192 && b==168))
-        printf("Type: Private\n");
+    if((a==10)||(a==172&&b>=16&&b<=31)||(a==192&&b==168))
+        printf("Private\n");
     else
-        printf("Type: Public\n");
+        printf("Public\n");
 
     return 0;
 }
 </pre>
 
-<button onclick="copyCode('ip')">Copy IP Code</button>
+<button onclick="copyCode('ip')">Copy</button>
 </div>
 
 <script>
-function copyCode(id) {
-    let text = document.getElementById(id).innerText;
+function copyCode(id){
+    const text = document.getElementById(id).innerText;
     navigator.clipboard.writeText(text);
-    alert("✅ Code Copied!");
+    alert("Copied!");
 }
 </script>
 
